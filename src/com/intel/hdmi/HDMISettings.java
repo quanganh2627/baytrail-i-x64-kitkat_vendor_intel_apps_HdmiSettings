@@ -80,11 +80,12 @@ public class HDMISettings extends PreferenceActivity
     private static final String HDMI_Get_DisplayBoot = "android.hdmi.GET_HDMI_Boot";
     private static final String HDMI_Set_DisplayBoot = "HdmiObserver.SET_HDMI_Boot";
 
-    /** define information type: width, height, refresh, arrInterlace*/
+    /** define information type: width, height, refresh, arrInterlace, arrRatio */
     private int[] arrWidth = null;
     private int[] arrHeight = null;
     private int[] arrRefresh = null;
     private int[] arrInterlace = null;
+    private int[] arrRatio = null;
     private String[] infoString;
 
     /** record hdmi connected status */
@@ -254,7 +255,7 @@ public class HDMISettings extends PreferenceActivity
             mHeight = arrHeight[index];
             mRefresh = arrRefresh[index];
             int mInterlace = arrInterlace[index];
-            int mRatio = 0;
+            int mRatio = arrRatio[index];
             Bundle bundle = new Bundle();
             bundle.putInt("width", mWidth);
             bundle.putInt("height", mHeight);
@@ -437,6 +438,8 @@ public class HDMISettings extends PreferenceActivity
                 arrRefresh = (int[]) extras.getSerializable("refresh");
                 arrInterlace = new int[count];
                 arrInterlace = (int[]) extras.getSerializable("interlace");
+                arrRatio = new int[count];
+                arrRatio = (int[]) extras.getSerializable("ratio");
 
                 for (int i = 0; i < count; i++){
                     infoString[i] = arrWidth[i] + "*" + arrHeight[i];
@@ -444,7 +447,12 @@ public class HDMISettings extends PreferenceActivity
                         infoString[i] += "I";
                     else
                         infoString[i] += "P";
+
                     infoString[i] += "@" + arrRefresh[i]+ "Hz";
+		    if (arrRatio[i] == 1)
+			infoString[i] += " [16:9]";
+		    else if (arrRatio[i] == 2)
+			infoString[i] += " [4:3]";
                 }
 
                 if (HasIncomingCall) {
