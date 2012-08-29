@@ -456,13 +456,13 @@ public class HDMISettings extends PreferenceActivity
                 }
 
                 if (HasIncomingCall) {
-                    //hdmiStatusPref.setChecked(true);
-                    hdmiStatusPref.setEnabled(false);
                     mHdmiStatus = false;
-                }
-                else {
-                    hdmiStatusPref.setEnabled(true);
+                    hdmiStatusPref.setEnabled(false);
+                    hdmiStatusPref.setSummary(R.string.hdmi_status_summary_off);
+                } else if (HDMIDeviceStatus && state == 1) {
                     mHdmiStatus = true;
+                    hdmiStatusPref.setEnabled(true);
+                    hdmiStatusPref.setSummary(R.string.hdmi_status_summary_on);
                 }
                 //UpdateInfo(infoString, (ListPreference)findPreference(KEY_MODE));
                 UpdateInfo(infoString, modePreference);
