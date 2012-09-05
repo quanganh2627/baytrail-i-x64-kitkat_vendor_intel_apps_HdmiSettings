@@ -202,7 +202,6 @@ public class HDMISettings extends PreferenceActivity
         boolean prefStatus = ((CheckBoxPreference)preference).isChecked();
         if (HasIncomingCall) {
             hdmiStatusPref.setEnabled(false);
-            hdmiStatusPref.setSummary(R.string.hdmi_status_summary_off);
         } else if (prefStatus && (state == 1)){
             hdmiStatusPref.setEnabled(true);
             hdmiStatusPref.setSummary(R.string.hdmi_status_summary_on);
@@ -387,12 +386,10 @@ public class HDMISettings extends PreferenceActivity
                     if (HasIncomingCall) {
                         hdmiStatusPref.setEnabled(false);
                         mHdmiStatus = false;
-                        hdmiStatusPref.setSummary(R.string.hdmi_status_summary_off);
                     } else if ((HDMIDeviceStatus && state == 1)
                         && ((!HasIncomingCall) && IncomingCallFinished)) {
                         mHdmiStatus = true;
                         hdmiStatusPref.setEnabled(true);
-                        hdmiStatusPref.setSummary(R.string.hdmi_status_summary_on);
                     }
                 }
                 else if (action.equals(AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
@@ -460,7 +457,6 @@ public class HDMISettings extends PreferenceActivity
                 if (HasIncomingCall) {
                     mHdmiStatus = false;
                     hdmiStatusPref.setEnabled(false);
-                    hdmiStatusPref.setSummary(R.string.hdmi_status_summary_off);
                 } else if (HDMIDeviceStatus && state == 1) {
                     mHdmiStatus = true;
                     hdmiStatusPref.setEnabled(true);
