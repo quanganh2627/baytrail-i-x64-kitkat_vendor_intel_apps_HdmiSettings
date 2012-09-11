@@ -106,6 +106,9 @@ public class OverscanPreference extends SeekBarDialogPreference {
         mRadioHori = (RadioButton)view.findViewById(com.intel.hdmi.R.id.horizontal);
         mRadioVert = (RadioButton)view.findViewById(com.intel.hdmi.R.id.vertical);
 
+        if (mZoomControls == null || mProgressBar == null || mRadioGroup == null)
+            return;
+
         mProgressBar.setMax(MAXIMUM_RATIO - MINIMUM_RATIO);
         mRadioGroup.setOnCheckedChangeListener(mChangeRadio);
 

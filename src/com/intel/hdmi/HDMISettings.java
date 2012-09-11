@@ -437,7 +437,8 @@ public class HDMISettings extends PreferenceActivity
                 arrInterlace = (int[]) extras.getSerializable("interlace");
                 arrRatio = new int[count];
                 arrRatio = (int[]) extras.getSerializable("ratio");
-                if (arrRatio == null)
+                if (arrWidth == null || arrHeight == null || arrRefresh == null ||
+                    arrInterlace == null || arrRatio == null)
                     return;
 
                 for (int i = 0; i < count; i++){
