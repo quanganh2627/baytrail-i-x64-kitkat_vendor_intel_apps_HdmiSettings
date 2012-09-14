@@ -36,26 +36,26 @@
     <!-- HDMI Setting -->
     <string name="hdmi_settings">HDMI</string>
     <!-- HDMI Setting, hdmi connect options-->
-    <string name="hdmi_connect_title">Connect</string>
-    <string name="hdmi_connect_summary_enable">HDMI Device Enable</string>
-    <string name="hdmi_connect_summary_disable">HDMI Device Disable</string>
+    <string name="hdmi_connect_title">HDMI Enabling</string>
+    <string name="hdmi_connect_summary_enable">HDMI Device Enabled</string>
+    <string name="hdmi_connect_summary_disable">HDMI Device Disabled</string>
     <!-- HDMI Setting, hdmi status options-->
     <string name="hdmi_status_title">HDMI Status</string>
-    <string name="hdmi_status_summary_on">HDMI Connect</string>
-    <string name="hdmi_status_summary_off">HDMI Disconnect</string>
+    <string name="hdmi_status_summary_on">HDMI Connected</string>
+    <string name="hdmi_status_summary_off">HDMI Disconnected</string>
     <!-- HDMI Setting, dvi status options-->
     <string name="dvi_status_title">DVI Status</string>
-    <string name="dvi_status_summary_on">DVI Connect (Current not support)</string>
-    <string name="dvi_status_summary_off">DVI Disconnect(Current not support)</string>
+    <string name="dvi_status_summary_on">DVI Connected(Currently not supported)</string>
+    <string name="dvi_status_summary_off">DVI Disconnected(Currently not supported)</string>
     <!-- HDMI Setting, mode setting options-->
     <string name="hdmi_mode_title">Modes</string>
-    <string name="hdmi_mode_summary">Adjust the HDMI Display Mode</string>
+    <string name="hdmi_mode_summary">Adjust HDMI Display Mode</string>
     <!-- HDMI Setting, scale mode options-->
     <string name="hdmi_scale_title">Scale Modes</string>
-    <string name="hdmi_scale_summary">Adjust the HDMI Display Scale Mode</string>
+    <string name="hdmi_scale_summary">Adjust HDMI Display Scale Mode</string>
     <!-- HDMI Setting, scale adjustment options-->
     <string name="hdmi_overscan_title">Overscan Compensation</string>
-    <string name="hdmi_overscan_summary">Step Adjust HDMI Display Screen</string>
+    <string name="hdmi_overscan_summary">Adjust HDMI Display Screen</string>
     <!-- HDMI Settings, ratio control text-->
     <string name="vertical">Vertical</string>
     <string name="horizontal">Horizontal</string>
