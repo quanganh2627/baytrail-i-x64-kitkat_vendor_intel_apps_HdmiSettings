@@ -353,6 +353,24 @@ public class HDMISettings extends PreferenceActivity
                     Log.i(TAG, "sendBroadcast hdmi_plug");
                     state = intent.getIntExtra("state", 0);
                     Log.i(TAG,"state:" + state);
+                    if(state == 0) {
+                        Log.i(TAG, "myBroadcaseReceiver:" + intent.toString());
+                        Dialog scalePreDialog = scalePreference.getDialog();
+                        Dialog modePreDialog = modePreference.getDialog();
+                        Dialog osPreDialog = osPreference.getDialog();
+                        if (scalePreDialog != null) {
+                            scalePreDialog.dismiss();
+                        }
+                        if (modePreDialog != null) {
+                            modePreDialog.dismiss();
+                        }
+                        if (osPreDialog != null) {
+                            osPreDialog.dismiss();
+                        }
+                        hdmiStatusPref.setEnabled(false);
+                        mHdmiStatus = false;
+                        hdmiStatusPref.setSummary(R.string.hdmi_status_summary_off);
+                    }
                 } else if (action.equals(HDMI_Set_DisplayBoot)) {
                     mDisplayBoot= intent.getIntExtra("DisplayBoot", 0);
                     Log.i(TAG,"mDisplayBoot:" + mDisplayBoot);
@@ -392,27 +410,6 @@ public class HDMISettings extends PreferenceActivity
                         hdmiStatusPref.setEnabled(true);
                     }
                 }
-                else if (action.equals(AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
-                /** HDMI Plugout*/
-                Log.i(TAG, "myBroadcaseReceiver:" + intent.toString());
-                //hdmiStatusPref.setChecked(false);
-                Dialog scalePreDialog = scalePreference.getDialog();
-                Dialog modePreDialog = modePreference.getDialog();
-                Dialog osPreDialog = osPreference.getDialog();
-                if (scalePreDialog != null) {
-                    scalePreDialog.dismiss();
-                }
-                if (modePreDialog != null) {
-                    modePreDialog.dismiss();
-                }
-                if (osPreDialog != null) {
-                    osPreDialog.dismiss();
-                }
-                hdmiStatusPref.setEnabled(false);
-                mHdmiStatus = false;
-                hdmiStatusPref.setSummary(R.string.hdmi_status_summary_off);
-                //clearStatus();
-            }
             else if (action.equals(HDMI_Observer_Info)) {
                 Log.i(TAG, "get broadcast");
                 /** Get mode infomation from hdmiobserver*/
