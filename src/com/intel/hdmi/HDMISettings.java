@@ -69,6 +69,7 @@ public class HDMISettings extends PreferenceActivity
     private static final String KEY_HDMI_DVI = "dvi_status";
     private static final String KEY_SCALE = "hdmi_scale";
     private static final String KEY_OVERSCAN = "hdmi_overscan";
+    private static final String KEY_HDCP_STATUS = "hdcp_status";
 
     /** key for broadcast action */
     private static final String HDMI_Plug = "android.intent.action.HDMI_AUDIO_PLUG";
@@ -79,6 +80,7 @@ public class HDMISettings extends PreferenceActivity
     private final String PHONE_INCALLSCREEN_FINISH = "com.android.phone_INCALLSCREEN_FINISH";
     private static final String HDMI_Get_DisplayBoot = "android.hdmi.GET_HDMI_Boot";
     private static final String HDMI_Set_DisplayBoot = "HdmiObserver.SET_HDMI_Boot";
+    private static final String HDMI_Set_Hdcp = "HdmiObserver.SET_HDMI_HDCP";
 
     /** define information type: width, height, refresh, arrInterlace, arrRatio */
     private int[] arrWidth = null;
@@ -91,6 +93,7 @@ public class HDMISettings extends PreferenceActivity
     /** record hdmi connected status */
     private boolean mHdmiStatus = false;
     private int mHdmiEnable = 1;
+    private int mHdcpEnable = 0;
     private int mScaleType = 3;
     private int mWidth = 0;
     private int mHeight = 0;
@@ -111,6 +114,7 @@ public class HDMISettings extends PreferenceActivity
     private ListPreference scalePreference;
     private ListPreference modePreference;
     private OverscanPreference osPreference;
+    private CheckBoxPreference HdcpStatusPref;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -143,6 +147,10 @@ public class HDMISettings extends PreferenceActivity
         hdmiDviPref.setSummary(R.string.dvi_status_summary_off);
         hdmiDviPref.setDependency(KEY_CONNECT);
        //hdmiDviPref.setSelectable(false);
+
+        HdcpStatusPref = (CheckBoxPreference)findPreference(KEY_HDCP_STATUS);
+        HdcpStatusPref.setOnPreferenceClickListener(this);
+        HdcpStatusPref.setDependency(KEY_HDMI_STATUS);
 
         conPref = (CheckBoxPreference)findPreference(KEY_CONNECT);
         conPref.setOnPreferenceClickListener(this);
@@ -190,19 +198,30 @@ public class HDMISettings extends PreferenceActivity
      * From OnPreferenceClickListener
      */
     public boolean onPreferenceClick(Preference preference) {
-        mHdmiEnable = ((CheckBoxPreference)preference).isChecked()? 1 : 0;
-        Bundle bundle = new Bundle();
-        bundle.putInt("Status", mHdmiEnable);
-        Intent intent = new Intent(Intent.HDMI_SET_STATUS);
-        intent.putExtras(bundle);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Log.i(TAG, "isHdmiEnable:"+ mHdmiEnable);
-        sendBroadcast(intent);
+        if ( conPref == (CheckBoxPreference)preference) {
+            mHdmiEnable = ((CheckBoxPreference)preference).isChecked()? 1 : 0;
+            Bundle bundle = new Bundle();
+            bundle.putInt("Status", mHdmiEnable);
+            Intent intent = new Intent(Intent.HDMI_SET_STATUS);
+            intent.putExtras(bundle);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Log.i(TAG, "isHdmiEnable:"+ mHdmiEnable);
+            sendBroadcast(intent);
+        }
+		else if ( HdcpStatusPref == (CheckBoxPreference)preference){
+			mHdcpEnable = ((CheckBoxPreference)preference).isChecked()? 1 : 0;
+			Log.i(TAG, "ismHdcpEnable:"+ mHdcpEnable);
+			Bundle bundle = new Bundle();
+			bundle.putInt("Status", mHdcpEnable);
+			Intent intent = new Intent(HDMI_Set_Hdcp);
+			intent.putExtras(bundle);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			sendBroadcast(intent);
+		}
 
-        boolean prefStatus = ((CheckBoxPreference)preference).isChecked();
         if (HasIncomingCall) {
             hdmiStatusPref.setEnabled(false);
-        } else if (prefStatus && (state == 1)){
+        } else if ((mHdmiEnable == 1) && (state == 1)){
             hdmiStatusPref.setEnabled(true);
             hdmiStatusPref.setSummary(R.string.hdmi_status_summary_on);
         } else {
@@ -300,6 +319,7 @@ public class HDMISettings extends PreferenceActivity
         scalePreference.setValueIndex(0);
         osPreference.SetChange(true);
         modePreference.setValueIndex(-1);
+        HdcpStatusPref.setChecked(false);
     }
 
     private void storeHDMISettingInfo(int count) {
@@ -479,8 +499,10 @@ public class HDMISettings extends PreferenceActivity
                     modePreference.setValueIndex(0);
                     osPreference.SetChange(true);
                     scalePreference.setValueIndex(0);
+                    HdcpStatusPref.setChecked(false);
                     mHdmiEnable = 1;
                     mEdidChange = 0;
+                    mHdcpEnable = 0;
                 }
                 if(mDisplayBoot == 1) {
                     mDisplayBoot = 0;

@@ -56,6 +56,11 @@
         android:selectable="false"
         android:enabled="false"/>
 
+    <CheckBoxPreference
+        android:disableDependentsState="false"
+        android:key="hdcp_status"
+        android:title="@string/hdcp_status_title" />
+
 <PreferenceCategory >
     <ListPreference
         android:title="@string/hdmi_mode_title"
