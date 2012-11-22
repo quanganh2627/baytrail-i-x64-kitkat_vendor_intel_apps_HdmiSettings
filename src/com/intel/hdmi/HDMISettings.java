@@ -505,6 +505,7 @@ public class HDMISettings extends PreferenceActivity
                 if((mEdidChange == 1) || (mDisplayBoot == 1)) {
                     modePreference.setValueIndex(0);
                     osPreference.SetChange(true);
+                    osPreference.setEnabled(true);
                     scalePreference.setValueIndex(0);
                     HdcpStatusPref.setChecked(false);
                     mHdmiEnable = 1;
