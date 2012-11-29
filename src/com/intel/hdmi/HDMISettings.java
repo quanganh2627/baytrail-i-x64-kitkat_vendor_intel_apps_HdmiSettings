@@ -133,6 +133,7 @@ public class HDMISettings extends PreferenceActivity
         addPreferencesFromResource(R.xml.hdmi_settings);
 
         hdmiStatusPref = (Preference)findPreference(KEY_HDMI_STATUS);
+        if (hdmiStatusPref == null) return;
         hdmiStatusPref.setOnPreferenceClickListener(this);
         //hdmiStatusPref.setChecked(false);
         hdmiStatusPref.setEnabled(false);
@@ -141,6 +142,7 @@ public class HDMISettings extends PreferenceActivity
        // hdmiStatusPref.setSelectable(false);
 
         hdmiDviPref = (Preference)findPreference(KEY_HDMI_DVI);
+        if (hdmiDviPref == null) return;
         hdmiDviPref.setOnPreferenceClickListener(this);
         //hdmiDviPref.setChecked(false);
         hdmiDviPref.setEnabled(false);
@@ -149,19 +151,24 @@ public class HDMISettings extends PreferenceActivity
        //hdmiDviPref.setSelectable(false);
 
         HdcpStatusPref = (CheckBoxPreference)findPreference(KEY_HDCP_STATUS);
+        if (HdcpStatusPref == null) return;
         HdcpStatusPref.setOnPreferenceClickListener(this);
         HdcpStatusPref.setDependency(KEY_HDMI_STATUS);
 
         conPref = (CheckBoxPreference)findPreference(KEY_CONNECT);
+        if (conPref == null) return;
         conPref.setOnPreferenceClickListener(this);
 
         scalePreference = (ListPreference)findPreference(KEY_SCALE);
+        if (scalePreference == null) return;
         scalePreference.setOnPreferenceChangeListener(this);
         scalePreference.setDependency(KEY_HDMI_STATUS);
 
         osPreference = (OverscanPreference)findPreference(KEY_OVERSCAN);
+        if (osPreference == null) return;
         osPreference.setDependency(KEY_HDMI_STATUS);
         modePreference = (ListPreference)findPreference(KEY_MODE);
+        if (modePreference == null) return;
         /** init mode control*/
         CharSequence[] mEntries = null;
         CharSequence[] mValue = null;
