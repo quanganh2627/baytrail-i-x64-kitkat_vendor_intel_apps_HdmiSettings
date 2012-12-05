@@ -106,7 +106,8 @@ public class OverscanPreference extends SeekBarDialogPreference {
         mRadioHori = (RadioButton)view.findViewById(com.intel.hdmi.R.id.horizontal);
         mRadioVert = (RadioButton)view.findViewById(com.intel.hdmi.R.id.vertical);
 
-        if (mZoomControls == null || mProgressBar == null || mRadioGroup == null)
+        if (mZoomControls == null || mProgressBar == null || mRadioGroup == null
+            || mRadioHori == null || mRadioVert == null)
             return;
 
         mProgressBar.setMax(MAXIMUM_RATIO - MINIMUM_RATIO);
@@ -117,11 +118,14 @@ public class OverscanPreference extends SeekBarDialogPreference {
             mScaleRatio = mHoriRatio = mVertRatio = MAXIMUM_RATIO;
             mOrientation = 0;
             mChange = false;
-                    }
-        if (mInit) {
-            SetStatus(mScaleRatio);
-            mRadioGroup.check(com.intel.hdmi.R.id.horizontal);
+        } else
             mInit = false;
+
+        if (mInit) {
+            mInit = false;
+            mOrientation = 0;
+            SetStatus(mHoriRatio);
+            mRadioGroup.check(com.intel.hdmi.R.id.horizontal);
         }
         else {
             if (mOrientation == 0) {
@@ -153,6 +157,7 @@ public class OverscanPreference extends SeekBarDialogPreference {
                     mVertRatio = mScaleRatio;
                     Log.i(TAG, "vert:" + mVertRatio);
                 }
+                StoreOverscanInfo();
             }
         });
 
@@ -175,6 +180,7 @@ public class OverscanPreference extends SeekBarDialogPreference {
                     mVertRatio = mScaleRatio;
                     //Log.i(TAG, "vert:" + vertRatio);
                 }
+                StoreOverscanInfo();
             }
         });
     }
@@ -186,6 +192,7 @@ public class OverscanPreference extends SeekBarDialogPreference {
                     // TODO Auto-generated method stub
                     if (checkedId == mRadioHori.getId()) {
                         mOrientation = 0;
+                        Log.i(TAG, "set mOrientation :" + mOrientation);
                         mScaleRatio = mHoriRatio;
                     }
                     else if (checkedId == mRadioVert.getId()) {
@@ -193,6 +200,7 @@ public class OverscanPreference extends SeekBarDialogPreference {
                         Log.i(TAG, "set mOrientation :" + mOrientation);
                         mScaleRatio = mVertRatio;
                     }
+                    StoreOverscanInfo();
                     SetStatus(mScaleRatio);
                 }
             };
@@ -223,17 +231,22 @@ public class OverscanPreference extends SeekBarDialogPreference {
             mZoomControls.setIsZoomOutEnabled(false);
     }
 
+    private void StoreOverscanInfo() {
+        SharedPreferences preferences =
+            getContext().getSharedPreferences("com.intel.hdmi_preferences", Context.MODE_MULTI_PROCESS);
+        Editor editor = preferences.edit();
+        if (preferences != null) {
+            editor.putInt("scaleRatio", mScaleRatio);
+            editor.putInt("horiRatio", mHoriRatio);
+            editor.putInt("vertRatio", mVertRatio);
+            editor.putInt("mOrientation", mOrientation);
+            editor.commit();
+        }
+    }
+
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
-
-        SharedPreferences preferences =
-            this.getContext().getSharedPreferences("com.intel.hdmi_preferences", Context.MODE_MULTI_PROCESS);
-        Editor editor = preferences.edit();
-        editor.putInt("scaleRatio", mScaleRatio);
-        editor.putInt("horiRatio", mHoriRatio);
-        editor.putInt("vertRatio", mVertRatio);
-        editor.putInt("mOrientation", mOrientation);
-        editor.commit();
+        StoreOverscanInfo();
     }
 };
