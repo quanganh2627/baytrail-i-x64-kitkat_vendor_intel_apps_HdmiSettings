@@ -36,10 +36,6 @@
 
     <!-- HDMI Setting -->
     <string name="hdmi_settings">HDMI</string>
-    <!-- HDMI Setting, hdmi connect options-->
-    <string name="hdmi_connect_title">连接</string>
-    <string name="hdmi_connect_summary_enable">HDMI 打开设备</string>
-    <string name="hdmi_connect_summary_disable">HDMI 关闭设备</string>
     <!-- HDMI Setting, hdmi status options-->
     <string name="hdmi_status_title">HDMI 状态</string>
     <string name="hdmi_status_summary_on">HDMI 连接</string>

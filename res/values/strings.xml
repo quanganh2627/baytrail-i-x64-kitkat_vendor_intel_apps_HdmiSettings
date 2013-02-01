@@ -35,10 +35,6 @@
 
     <!-- HDMI Setting -->
     <string name="hdmi_settings">HDMI</string>
-    <!-- HDMI Setting, hdmi connect options-->
-    <string name="hdmi_connect_title">HDMI Enabling</string>
-    <string name="hdmi_connect_summary_enable">HDMI Device Enabled</string>
-    <string name="hdmi_connect_summary_disable">HDMI Device Disabled</string>
     <!-- HDMI Setting, hdmi status options-->
     <string name="hdmi_status_title">HDMI Status</string>
     <string name="hdmi_status_summary_on">HDMI Connected</string>
