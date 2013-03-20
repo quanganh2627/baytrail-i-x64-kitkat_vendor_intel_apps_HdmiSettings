@@ -76,7 +76,6 @@ public class HDMISettings extends PreferenceActivity
     private static final String HDMI_Get_Info = "android.hdmi.GET_HDMI_INFO";
     private static final String HDMI_Set_Info = "android.hdmi.SET_HDMI_INFO";
     private static final String HDMI_Set_Scale = "android.hdmi.SET.HDMI_SCALE";
-    private final String PHONE_INCALLSCREEN_FINISH = "com.android.phone_INCALLSCREEN_FINISH";
     private static final String HDMI_Get_DisplayBoot = "android.hdmi.GET_HDMI_Boot";
     private static final String HDMI_Set_DisplayBoot = "HdmiObserver.SET_HDMI_Boot";
     private static final String HDMI_Set_Hdcp = "HdmiObserver.SET_HDMI_HDCP";
@@ -101,7 +100,6 @@ public class HDMISettings extends PreferenceActivity
     private int mEdidChange =0;
     private int mDisplayBoot =0;
     private int state;
-    private boolean HDMIDeviceStatus;
     private boolean HasIncomingCall = false;
     private boolean IncomingCallFinished = true;
 
@@ -121,7 +119,6 @@ public class HDMISettings extends PreferenceActivity
         intentFilter.addAction(HDMI_Plug);
         intentFilter.addAction(HDMI_Observer_Info);
         intentFilter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
-        intentFilter.addAction(PHONE_INCALLSCREEN_FINISH);
         intentFilter.addAction(HDMI_Set_DisplayBoot);
 
         registerReceiver(mReceiver, intentFilter);
@@ -386,37 +383,34 @@ public class HDMISettings extends PreferenceActivity
                     mDisplayBoot= intent.getIntExtra("DisplayBoot", 0);
                     Log.i(TAG,"mDisplayBoot:" + mDisplayBoot);
                 }
-                else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED) ||
-                                action.equals(PHONE_INCALLSCREEN_FINISH)) {
-                    if (action.equals(PHONE_INCALLSCREEN_FINISH)) {
+                else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
+                    if (TelephonyManager.EXTRA_STATE == null ||
+                                TelephonyManager.EXTRA_STATE_RINGING == null)
+                        return;
+                    String extras = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+                    if (extras == null)
+                        return;
+                    if (extras.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+                        IncomingCallFinished = false;
+                        HasIncomingCall = true;
+                    } else if (extras.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
                         IncomingCallFinished = true;
                         HasIncomingCall = false;
-                        Log.i(TAG, "incoming call screen finished: " + IncomingCallFinished);
-                    } else {
-                        if (TelephonyManager.EXTRA_STATE == null ||
-                                    TelephonyManager.EXTRA_STATE_RINGING == null)
-                            return;
-                        String extras = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-                        if (extras == null)
-                            return;
-                        if (extras.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
-                            IncomingCallFinished = false;
-                            HasIncomingCall = true;
-                        } else if (extras.equals(TelephonyManager.EXTRA_STATE_IDLE))
-                            HasIncomingCall = false;
-                        else
-                            return;
+                    }
+                    else
+                        return;
                         Log.i(TAG, "incoming call " +
                                 (HasIncomingCall == true ? "initiated" : "terminated"));
-                    }
 
                     if (HasIncomingCall) {
                         hdmiStatusPref.setEnabled(false);
                         mHdmiStatus = false;
-                    } else if ((HDMIDeviceStatus && state == 1)
+                        hdmiStatusPref.setSummary(R.string.hdmi_status_summary_off);
+                    } else if ((state == 1)
                         && ((!HasIncomingCall) && IncomingCallFinished)) {
-                        mHdmiStatus = true;
                         hdmiStatusPref.setEnabled(true);
+                        mHdmiStatus = true;
+                        hdmiStatusPref.setSummary(R.string.hdmi_status_summary_on);
                     }
                 }
             else if (action.equals(HDMI_Observer_Info)) {
@@ -464,7 +458,7 @@ public class HDMISettings extends PreferenceActivity
                 if (HasIncomingCall) {
                     mHdmiStatus = false;
                     hdmiStatusPref.setEnabled(false);
-                } else if (HDMIDeviceStatus && state == 1) {
+                } else if (state == 1) {
                     mHdmiStatus = true;
                     hdmiStatusPref.setEnabled(true);
                     hdmiStatusPref.setSummary(R.string.hdmi_status_summary_on);
