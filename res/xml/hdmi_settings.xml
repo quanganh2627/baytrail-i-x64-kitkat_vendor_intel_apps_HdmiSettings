@@ -33,12 +33,27 @@
     android:title="@string/hdmi_settings"
     xmlns:settings="http://schemas.android.com/apk/res/com.android.settings">
 
-<Preference
+<PreferenceCategory >
+    <Preference
         android:disableDependentsState="false"
         android:title="@string/hdmi_status_title"
         android:key="hdmi_status"
         android:selectable="false"
-        android:id="@+id/CheckBox_AutoConnect"/>
+        android:id="@+id/CheckBox_AutoConnect" />
+
+    <Preference
+        android:disableDependentsState="false"
+        android:title="@string/dvi_status_title"
+        android:key="dvi_status"
+        android:selectable="false"
+        android:enabled="false"/>
+
+</PreferenceCategory>
+
+<CheckBoxPreference
+        android:disableDependentsState="false"
+        android:key="hdcp_status"
+        android:title="@string/hdcp_status_title" />
 
 <ListPreference
         android:title="@string/hdmi_mode_title"
@@ -62,6 +77,6 @@
         android:dialogTitle="@string/hdmi_overscan_title"
         android:summary="@string/hdmi_overscan_summary"
         android:title="@string/hdmi_overscan_title"
-        android:persistent="true"/>
+        android:persistent="true" />
 
 </PreferenceScreen>

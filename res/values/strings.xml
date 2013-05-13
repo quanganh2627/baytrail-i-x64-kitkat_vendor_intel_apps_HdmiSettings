@@ -39,6 +39,12 @@
     <string name="hdmi_status_title">HDMI Status</string>
     <string name="hdmi_status_summary_on">HDMI Connected</string>
     <string name="hdmi_status_summary_off">HDMI Disconnected</string>
+    <!-- HDMI Setting, dvi status options-->
+    <string name="dvi_status_title">DVI Status</string>
+    <string name="dvi_status_summary_on">DVI Connected(Currently not supported)</string>
+    <string name="dvi_status_summary_off">DVI Disconnected(Currently not supported)</string>
+    <!-- HDMI Setting, hdcp status options-->
+    <string name="hdcp_status_title">Always Enable HDCP</string>
     <!-- HDMI Setting, mode setting options-->
     <string name="hdmi_mode_title">Modes</string>
     <string name="hdmi_mode_summary">Adjust HDMI Display Mode</string>
