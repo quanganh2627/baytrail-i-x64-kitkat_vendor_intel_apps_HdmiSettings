@@ -412,6 +412,15 @@ public class HDMISettings extends PreferenceActivity
                 //UpdateInfo(infoString, (ListPreference)findPreference(KEY_MODE));
                 UpdateInfo(infoString, modePreference);
 
+                Log.i(TAG, "After UpdateInfo,mDisplayBoot: " + mDisplayBoot);
+                if((mEdidChange == 1) || (mDisplayBoot == 1)) {
+                    modePreference.setValueIndex(0);
+                    osPreference.SetChange(true);
+                    osPreference.setEnabled(true);
+                    scalePreference.setValueIndex(0);
+                    mEdidChange = 0;
+                }
+
                 if (mDisplayBoot == 1) {
                     mScaleType = 3;
                 } else {
@@ -423,14 +432,6 @@ public class HDMISettings extends PreferenceActivity
                     osPreference.setEnabled(true);
                 }
 
-                Log.i(TAG, "After UpdateInfo,mDisplayBoot: " + mDisplayBoot);
-                if((mEdidChange == 1) || (mDisplayBoot == 1)) {
-                    modePreference.setValueIndex(0);
-                    osPreference.SetChange(true);
-                    osPreference.setEnabled(true);
-                    scalePreference.setValueIndex(0);
-                    mEdidChange = 0;
-                }
                 if(mDisplayBoot == 1) {
                     mDisplayBoot = 0;
                 }
