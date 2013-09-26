@@ -295,11 +295,6 @@ public class HDMISettings extends PreferenceActivity
                 String action = intent.getAction();
                 //if (action.equals(HDMI_Plug)) {
                 if (action.equals(Intent.ACTION_HDMI_AUDIO_PLUG)) {
-                    /** HDMI Plugin*/
-                    Log.i(TAG, "HDMI_PLUG");
-                    Intent outIntent = new Intent(HDMI_Get_Info);
-                    context.sendBroadcast(outIntent);
-                    Log.i(TAG, "sendBroadcast hdmi_plug");
                     state = intent.getIntExtra("state", 0);
                     Log.i(TAG,"state:" + state);
                     if(state == 0) {
@@ -320,6 +315,11 @@ public class HDMISettings extends PreferenceActivity
                         mHdmiStatus = false;
                         hdmiStatusPref.setSummary(R.string.hdmi_status_summary_off);
                     } else {
+                        /** HDMI Plugin*/
+                        Log.i(TAG, "HDMI_PLUG");
+                        Intent outIntent = new Intent(HDMI_Get_Info);
+                        context.sendBroadcast(outIntent);
+                        Log.i(TAG, "sendBroadcast hdmi_plug");
                         hdmiStatusPref.setEnabled(true);
                         mHdmiStatus = true;
                         hdmiStatusPref.setSummary(R.string.hdmi_status_summary_on);
