@@ -396,9 +396,9 @@ public class HDMISettings extends PreferenceActivity
 
                     infoString[i] += "@" + arrRefresh[i]+ "Hz";
 		    if (arrRatio[i] == 1)
-			infoString[i] += " [16:9]";
-		    else if (arrRatio[i] == 2)
 			infoString[i] += " [4:3]";
+		    else if (arrRatio[i] == 2)
+			infoString[i] += " [16:9]";
                 }
 
                 if (HasIncomingCall) {
