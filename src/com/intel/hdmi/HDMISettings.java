@@ -228,7 +228,7 @@ public class HDMISettings extends PreferenceActivity
     **/
     private void UpdateInfo(String[] info, ListPreference target) {
         // TODO Auto-generated method stub
-        Log.i(TAG, "isHdmiConnected" + mHdmiStatus);
+        Log.i(TAG, "isHdmiConnected is " + mHdmiStatus);
         if (mHdmiStatus) {
             Log.i(TAG, "updateInfo:" + info.length);
             CharSequence[] mEntries = new CharSequence[info.length];
@@ -237,7 +237,7 @@ public class HDMISettings extends PreferenceActivity
             {
                 mEntries[i] = info[i];
                 mValue[i] = Integer.toString(i);
-            Log.i(TAG, "updateInfo:"+ i+ ":"+ info[i]);
+                Log.i(TAG, "updateInfo:"+ i+ ":"+ info[i]);
             }
             Log.i(TAG, "updateInfo:target="+ target+ ":");
             target.setEntries(mEntries);
@@ -360,17 +360,15 @@ public class HDMISettings extends PreferenceActivity
                     }
                 }
             else if (action.equals(HDMI_Observer_Info)) {
-                Log.i(TAG, "get broadcast");
                 /** Get mode infomation from hdmiobserver*/
-                Log.i(TAG, "myBroadcaseReceiver:" + intent.toString());
+                Log.i(TAG, "get HDMI timing info");
                 Bundle extras = intent.getExtras();
                 if (extras == null)
                     return;
                 int count = extras.getInt("count");
                 mEdidChange = extras.getInt("EdidChange");
                 HasIncomingCall = extras.getBoolean("hasIncomingCall");
-                Log.i(TAG, "EdidChange: "+ mEdidChange);
-                Log.i(TAG, "HasIncomingCall: "+ HasIncomingCall);
+                Log.i(TAG, "Hdmi mode count:" + count + ",EdidChange:"+ mEdidChange + ",has incoming call:" + HasIncomingCall);
 
                 infoString = new String[count];
                 arrWidth = new int[count];
@@ -387,7 +385,7 @@ public class HDMISettings extends PreferenceActivity
                     arrInterlace == null || arrRatio == null)
                     return;
 
-                for (int i = 0; i < count; i++){
+                for (int i = 0; i < count; i++) {
                     infoString[i] = arrWidth[i] + "*" + arrHeight[i];
                     if (arrInterlace[i] != 0)
                         infoString[i] += "I";
@@ -395,10 +393,10 @@ public class HDMISettings extends PreferenceActivity
                         infoString[i] += "P";
 
                     infoString[i] += "@" + arrRefresh[i]+ "Hz";
-		    if (arrRatio[i] == 1)
-			infoString[i] += " [4:3]";
-		    else if (arrRatio[i] == 2)
-			infoString[i] += " [16:9]";
+                    if (arrRatio[i] == 1)
+                        infoString[i] += " [4:3]";
+                    else if (arrRatio[i] == 2)
+                        infoString[i] += " [16:9]";
                 }
 
                 if (HasIncomingCall) {
@@ -437,8 +435,12 @@ public class HDMISettings extends PreferenceActivity
                 }
 
                 String value = modePreference.getValue();
-                if(value != null){
+                if(value != null) {
                     int index = Integer.parseInt(value);
+                    if (index >= count) {
+                        Log.w(TAG, "Out of array boundary, " + value + ", index " + index);
+                        return;
+                    }
                     mWidth = arrWidth[index];
                     mHeight = arrHeight[index];
                     Log.i(TAG, "update mWidth");
