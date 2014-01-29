@@ -81,7 +81,8 @@ public class OverscanPreference extends SeekBarDialogPreference {
         setDialogLayoutResource(R.layout.preference_dialog_overscan);
 
         SharedPreferences preferences =
-            this.getContext().getSharedPreferences("com.intel.hdmi_preferences", Context.MODE_MULTI_PROCESS);
+            this.getContext().getSharedPreferences(
+                    "com.intel.hdmi_preferences", Context.MODE_MULTI_PROCESS);
         //Log.i(TAG, "preferences" + this.getContext().getSharedPrefsFile("com.android.hdmi_preferences"));
         //Log.i(TAG,"scaleRatio"+scaleRatio);
         if (preferences != null) {
@@ -90,7 +91,7 @@ public class OverscanPreference extends SeekBarDialogPreference {
             mVertRatio = preferences.getInt("vertRatio", MAXIMUM_RATIO);
             mOrientation = preferences.getInt("mOrientation", MAXIMUM_RATIO);
         }
-        Log.i(TAG, "scaleRatio" + mScaleRatio);
+        Log.i(TAG, "scaleRatio: " + mScaleRatio);
     }
 
     public void SetChange(boolean change) {
@@ -151,11 +152,11 @@ public class OverscanPreference extends SeekBarDialogPreference {
 
                 if (mOrientation == 0) {
                     mHoriRatio = mScaleRatio;
-                    Log.i(TAG, "hori:" + mHoriRatio + "mOrientation:" + mOrientation);
+                    Log.i(TAG, "hori: " + mHoriRatio + "mOrientation: " + mOrientation);
                 }
                 else {
                     mVertRatio = mScaleRatio;
-                    Log.i(TAG, "vert:" + mVertRatio);
+                    Log.i(TAG, "vert: " + mVertRatio);
                 }
                 StoreOverscanInfo();
             }
@@ -233,7 +234,8 @@ public class OverscanPreference extends SeekBarDialogPreference {
 
     private void StoreOverscanInfo() {
         SharedPreferences preferences =
-            getContext().getSharedPreferences("com.intel.hdmi_preferences", Context.MODE_MULTI_PROCESS);
+            getContext().getSharedPreferences(
+                    "com.intel.hdmi_preferences", Context.MODE_MULTI_PROCESS);
         Editor editor = preferences.edit();
         if (preferences != null) {
             editor.putInt("scaleRatio", mScaleRatio);

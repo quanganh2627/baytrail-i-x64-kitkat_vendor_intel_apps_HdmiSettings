@@ -7,6 +7,7 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src)
 
 LOCAL_PACKAGE_NAME := HdmiSettings
 LOCAL_CERTIFICATE := platform
+LOCAL_JAVA_LIBRARIES += com.intel.multidisplay
 
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
