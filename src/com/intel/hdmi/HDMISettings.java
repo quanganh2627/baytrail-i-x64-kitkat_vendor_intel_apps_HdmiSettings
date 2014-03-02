@@ -88,6 +88,7 @@ public class HDMISettings extends PreferenceActivity
     private final BroadcastReceiver mReceiver = new intentHandler();
     private boolean mHasInComingCall = false;
     private boolean mInComingCallFinished = true;
+    private boolean mAllowModeSet = true;
 
     /** preference */
     private Preference mEdpStatusPref;
@@ -103,6 +104,7 @@ public class HDMISettings extends PreferenceActivity
         intentFilter.addAction(DisplaySetting.MDS_HDMI_INFO);
         intentFilter.addAction(DisplaySetting.MDS_HDMI_INFO);
         intentFilter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
+        intentFilter.addAction(DisplaySetting.MDS_HDMI_ALLOW_MODE_SET);
 
         registerReceiver(mReceiver, intentFilter);
         addPreferencesFromResource(R.xml.hdmi_settings);
@@ -299,7 +301,10 @@ public class HDMISettings extends PreferenceActivity
                     mEdpStatus = type;
                     Intent outIntent = new Intent(DisplaySetting.MDS_GET_HDMI_INFO);
                     context.sendBroadcast(outIntent);
-                    mEdpStatusPref.setEnabled(true);
+                    if (mAllowModeSet)
+                        mEdpStatusPref.setEnabled(true);
+                    else
+                        mEdpStatusPref.setEnabled(false);
                     mEdpStatusPref.setSummary(R.string.hdmi_status_summary_on);
                 }
             } else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
@@ -327,7 +332,10 @@ public class HDMISettings extends PreferenceActivity
                 } else {
                     if ((mEdpStatus > 0)
                             && ((!mHasInComingCall) && mInComingCallFinished)) {
-                        mEdpStatusPref.setEnabled(true);
+                        if (mAllowModeSet)
+                            mEdpStatusPref.setEnabled(true);
+                        else
+                            mEdpStatusPref.setEnabled(false);
                         mEdpStatusPref.setSummary(R.string.hdmi_status_summary_on);
                     }
                 }
@@ -350,6 +358,7 @@ public class HDMISettings extends PreferenceActivity
                 // TODO: bootStatus is a strange variable
                 int bootStatus = extras.getInt("bootStatus");
                 mHasInComingCall = extras.getBoolean("hasIncomingCall");
+                mAllowModeSet = extras.getBoolean("allowModeSet");
                 Log.i(TAG, "Hdmi mode count:" + count +
                         ",Hdmi status:"+ mEdpStatus + " ,incoming call:" +
                         mHasInComingCall + " ,Boot status " +
@@ -359,7 +368,10 @@ public class HDMISettings extends PreferenceActivity
                         !mHasInComingCall && mInComingCallFinished) {
                     Log.i(TAG, "Find an ignored HDMI plugin event");
                     mEdpStatus = eDPlugIn;
-                    mEdpStatusPref.setEnabled(true);
+                    if (mAllowModeSet)
+                        mEdpStatusPref.setEnabled(true);
+                    else
+                        mEdpStatusPref.setEnabled(false);
                     mEdpStatusPref.setSummary(R.string.hdmi_status_summary_on);
                 }
 
@@ -397,7 +409,10 @@ public class HDMISettings extends PreferenceActivity
                     mEdpStatusPref.setEnabled(false);
                 } else {
                     if (mEdpStatus > 0) {
-                        mEdpStatusPref.setEnabled(true);
+                        if (mAllowModeSet)
+                            mEdpStatusPref.setEnabled(true);
+                        else
+                            mEdpStatusPref.setEnabled(false);
                         mEdpStatusPref.setSummary(R.string.hdmi_status_summary_on);
                     }
                 }
@@ -430,8 +445,16 @@ public class HDMISettings extends PreferenceActivity
                 }
                 Log.i(TAG, "Now Mode is: " + mWidth + "x" + mHeight + "@" + mRefresh + "Hz");
                 storeHDMISettingInfo(count);
-            } // MDS_HDMI_INFO
-        }//onRecive
+            } else if (action.equals(DisplaySetting.MDS_HDMI_ALLOW_MODE_SET)) {
+                Bundle extras = intent.getExtras();
+                mAllowModeSet = extras.getBoolean("allowModeSet");
+                Log.w(TAG, "mAllowModeSet : "+ mAllowModeSet);
+                if (mAllowModeSet)
+                    mEdpStatusPref.setEnabled(true);
+                else
+                    mEdpStatusPref.setEnabled(false);
+            }
+            }//onRecive
     }//intentHandler
 }
 
