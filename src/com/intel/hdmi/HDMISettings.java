@@ -76,6 +76,7 @@ public class HDMISettings extends PreferenceActivity
     private static final String HDMI_Set_Scale = "android.hdmi.SET.HDMI_SCALE";
     private static final String HDMI_Get_DisplayBoot = "android.hdmi.GET_HDMI_Boot";
     private static final String HDMI_Set_DisplayBoot = "HdmiObserver.SET_HDMI_Boot";
+    private static final String HDMI_ALLOW_MODE_SET = "HdmiObserver.ALLOW_MODE_SET";
 
     /** define information type: width, height, refresh, arrInterlace, arrRatio */
     private int[] arrWidth = null;
@@ -98,6 +99,7 @@ public class HDMISettings extends PreferenceActivity
     private int state;
     private boolean HasIncomingCall = false;
     private boolean IncomingCallFinished = true;
+    private boolean mAllowModeSet = true;
 
     /** preference */
     private Preference hdmiStatusPref;
@@ -115,6 +117,7 @@ public class HDMISettings extends PreferenceActivity
         intentFilter.addAction(HDMI_Observer_Info);
         intentFilter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
         intentFilter.addAction(HDMI_Set_DisplayBoot);
+        intentFilter.addAction(HDMI_ALLOW_MODE_SET);
 
         registerReceiver(mReceiver, intentFilter);
         //this.registerReceiver(mReceiver, intentFilter);
@@ -320,7 +323,10 @@ public class HDMISettings extends PreferenceActivity
                         Intent outIntent = new Intent(HDMI_Get_Info);
                         context.sendBroadcast(outIntent);
                         Log.i(TAG, "sendBroadcast hdmi_plug");
-                        hdmiStatusPref.setEnabled(true);
+                        if (mAllowModeSet)
+                            hdmiStatusPref.setEnabled(true);
+                        else
+                            hdmiStatusPref.setEnabled(false);
                         mHdmiStatus = true;
                         hdmiStatusPref.setSummary(R.string.hdmi_status_summary_on);
                     }
@@ -354,7 +360,10 @@ public class HDMISettings extends PreferenceActivity
                         hdmiStatusPref.setSummary(R.string.hdmi_status_summary_off);
                     } else if ((state == 1)
                         && ((!HasIncomingCall) && IncomingCallFinished)) {
-                        hdmiStatusPref.setEnabled(true);
+                        if (mAllowModeSet)
+                            hdmiStatusPref.setEnabled(true);
+                        else
+                            hdmiStatusPref.setEnabled(false);
                         mHdmiStatus = true;
                         hdmiStatusPref.setSummary(R.string.hdmi_status_summary_on);
                     }
@@ -368,6 +377,7 @@ public class HDMISettings extends PreferenceActivity
                 int count = extras.getInt("count");
                 mEdidChange = extras.getInt("EdidChange");
                 HasIncomingCall = extras.getBoolean("hasIncomingCall");
+                mAllowModeSet = extras.getBoolean("mAllowModeSet");
                 Log.i(TAG, "Hdmi mode count:" + count + ",EdidChange:"+ mEdidChange + ",has incoming call:" + HasIncomingCall);
 
                 infoString = new String[count];
@@ -404,7 +414,10 @@ public class HDMISettings extends PreferenceActivity
                     hdmiStatusPref.setEnabled(false);
                 } else if (state == 1) {
                     mHdmiStatus = true;
-                    hdmiStatusPref.setEnabled(true);
+                    if (mAllowModeSet)
+                        hdmiStatusPref.setEnabled(true);
+                    else
+                        hdmiStatusPref.setEnabled(false);
                     hdmiStatusPref.setSummary(R.string.hdmi_status_summary_on);
                 }
                 //UpdateInfo(infoString, (ListPreference)findPreference(KEY_MODE));
@@ -448,6 +461,14 @@ public class HDMISettings extends PreferenceActivity
                 Log.i(TAG, "mWidth:"+mWidth+", mHeight:"+mHeight);
 
                 storeHDMISettingInfo(count);
+            } else if (action.equals(HDMI_ALLOW_MODE_SET)) {
+                Bundle extras = intent.getExtras();
+                mAllowModeSet = extras.getBoolean("mAllowModeSet");
+                Log.w(TAG, "mAllowModeSet : "+ mAllowModeSet);
+                if (mAllowModeSet && mHdmiStatus && !HasIncomingCall)
+                    hdmiStatusPref.setEnabled(true);
+                else
+                    hdmiStatusPref.setEnabled(false);
             }
         }//onRecive
     }//myBroadcastReceiver
