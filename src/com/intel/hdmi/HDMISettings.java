@@ -447,6 +447,10 @@ public class HDMISettings extends PreferenceActivity
                 storeHDMISettingInfo(count);
             } else if (action.equals(DisplaySetting.MDS_ALLOW_MODE_SET)) {
                 Bundle extras = intent.getExtras();
+                if(extras == null) {
+                    Log.e(TAG, "Try to dereference null");
+                    return;
+                }
                 mAllowModeSet = extras.getBoolean("allowModeSet");
                 Log.i(TAG, "allow Mode Set : "+ mAllowModeSet + ", edp: " + mEdpStatus);
                 if (mAllowModeSet && mEdpStatus > 0 && !mHasInComingCall)
