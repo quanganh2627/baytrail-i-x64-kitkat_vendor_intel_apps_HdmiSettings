@@ -362,7 +362,7 @@ public class HDMISettings extends PreferenceActivity
                 Log.i(TAG, "Hdmi mode count:" + count +
                         ",Hdmi status:"+ mEdpStatus + " ,incoming call:" +
                         mHasInComingCall + " ,Boot status " +
-                        bootStatus + ", plugin:" + eDPlugIn);
+                        bootStatus + ", plugin:" + eDPlugIn + ", allowModeSet: " + mAllowModeSet);
                 // A corner case for EDP hotplug in boot process
                 if (mEdpStatus == 0 &&
                         !mHasInComingCall && mInComingCallFinished) {
