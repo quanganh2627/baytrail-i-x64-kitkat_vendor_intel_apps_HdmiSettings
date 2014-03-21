@@ -43,6 +43,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 import java.io.File;
+import com.intel.multidisplay.DisplaySetting;
 
 
 public class OverscanPreference extends SeekBarDialogPreference {
@@ -53,9 +54,6 @@ public class OverscanPreference extends SeekBarDialogPreference {
     private  RadioGroup   mRadioGroup;
     private  RadioButton  mRadioHori;
     private  RadioButton  mRadioVert;
-
-    /** be used for intent, consistent with HDMIObersver */
-    String HDMI_Set_Step_Scale = "android.hdmi.SET.HDMI_STEP_SCALE";
 
     /** Scale ratio scope */
     private static final int MINIMUM_RATIO = 0;
@@ -212,7 +210,7 @@ public class OverscanPreference extends SeekBarDialogPreference {
         Bundle bundle = new Bundle();
         bundle.putInt("Step", value);
         bundle.putInt("Orientation", mOrientation);
-        Intent intent = new Intent(HDMI_Set_Step_Scale);
+        Intent intent = new Intent(DisplaySetting.MDS_SET_HDMI_STEP_SCALE);
         Log.i(TAG,"orientation: " + mOrientation);
         Log.i(TAG,"Step: " + value);
         intent.putExtras(bundle);
