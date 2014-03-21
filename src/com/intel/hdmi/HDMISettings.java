@@ -104,7 +104,7 @@ public class HDMISettings extends PreferenceActivity
         intentFilter.addAction(DisplaySetting.MDS_HDMI_INFO);
         intentFilter.addAction(DisplaySetting.MDS_HDMI_INFO);
         intentFilter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
-        intentFilter.addAction(DisplaySetting.MDS_HDMI_ALLOW_MODE_SET);
+        intentFilter.addAction(DisplaySetting.MDS_ALLOW_MODE_SET);
 
         registerReceiver(mReceiver, intentFilter);
         addPreferencesFromResource(R.xml.hdmi_settings);
@@ -362,7 +362,7 @@ public class HDMISettings extends PreferenceActivity
                 Log.i(TAG, "Hdmi mode count:" + count +
                         ",Hdmi status:"+ mEdpStatus + " ,incoming call:" +
                         mHasInComingCall + " ,Boot status " +
-                        bootStatus + ", plugin:" + eDPlugIn + ", allowModeSet: " + mAllowModeSet);
+                        bootStatus + ", plugin:" + eDPlugIn + ", allow mode set: " + mAllowModeSet);
                 // A corner case for EDP hotplug in boot process
                 if (mEdpStatus == 0 &&
                         !mHasInComingCall && mInComingCallFinished) {
@@ -445,16 +445,20 @@ public class HDMISettings extends PreferenceActivity
                 }
                 Log.i(TAG, "Now Mode is: " + mWidth + "x" + mHeight + "@" + mRefresh + "Hz");
                 storeHDMISettingInfo(count);
-            } else if (action.equals(DisplaySetting.MDS_HDMI_ALLOW_MODE_SET)) {
+            } else if (action.equals(DisplaySetting.MDS_ALLOW_MODE_SET)) {
                 Bundle extras = intent.getExtras();
+                if(extras == null) {
+                    Log.e(TAG, "Try to dereference null");
+                    return;
+                }
                 mAllowModeSet = extras.getBoolean("allowModeSet");
-                Log.w(TAG, "mAllowModeSet : "+ mAllowModeSet);
-                if (mAllowModeSet)
+                Log.i(TAG, "allow Mode Set : "+ mAllowModeSet + ", edp: " + mEdpStatus);
+                if (mAllowModeSet && mEdpStatus > 0 && !mHasInComingCall)
                     mEdpStatusPref.setEnabled(true);
                 else
                     mEdpStatusPref.setEnabled(false);
-            }
-            }//onRecive
+            } // MDS_HDMI_INFO
+        }//onRecive
     }//intentHandler
 }
 
