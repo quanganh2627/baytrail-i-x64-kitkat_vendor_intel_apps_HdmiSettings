@@ -201,11 +201,13 @@ public class HDMISettings extends PreferenceActivity
             Intent intent = new Intent(DisplaySetting.MDS_SET_HDMI_MODE);
             intent.putExtras(bundle);
             sendBroadcast(intent);
-            /** disable overscan when center Scale is set */
-            if (mScaleType == 2)
-            {
-                mOsPref.setEnabled(false);
-            }
+
+            /**Reset scale mode and overscan compensation value*/
+            mModePref.setValueIndex(0);
+            mOsPref.SetChange(true);
+            mOsPref.setEnabled(true);
+            mScalePref.setValueIndex(0);
+            mScaleType = 3;
         }
         return true;
     }
