@@ -95,6 +95,7 @@ public class OverscanPreference extends SeekBarDialogPreference {
     public void SetChange(boolean change) {
         mChange = change;
         mScaleRatio = mHoriRatio = mVertRatio = MAXIMUM_RATIO;
+        mOrientation = 0;
         StoreOverscanInfo();
     }
 
